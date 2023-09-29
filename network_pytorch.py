@@ -4,7 +4,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-
 class NeuralNetworkTorch(nn.Module):
     def __init__(self, sizes, epochs=10, learning_rate=0.01, random_state=1):
         '''
@@ -25,22 +24,30 @@ class NeuralNetworkTorch(nn.Module):
         self.activation_func = torch.sigmoid
         self.output_func = torch.softmax
         self.loss_func = nn.BCEWithLogitsLoss()
+        
+        # Layers of the neural network using nn.ModuleList
+        self.layers = nn.ModuleList([nn.Linear(sizes[i], sizes[i+1]) for i in range(len(sizes)-1)])
+
         self.optimizer = optim.SGD(self.parameters(), lr=learning_rate)
+        
 
         
     def _forward_pass(self, x_train):
         '''
         TODO: The method should return the output of the network.
         '''
-        pass
+        out = x_train
+        for layer in self.layers[:-1]:
+            out = self.activation_func(layer(out))
+        out = self.layers[-1](out)
+        return out
 
 
 
     def _backward_pass(self, y_train, output):
-        '''
-        TODO: Implement the backpropagation algorithm responsible for updating the weights of the neural network.
-        '''
-        pass
+         # Compute the loss gradient
+         loss = self.loss_func(output, y_train.float())
+         loss.backward()
 
 
 
@@ -48,7 +55,9 @@ class NeuralNetworkTorch(nn.Module):
         '''
         TODO: Update the network weights according to stochastic gradient descent.
         '''
-        pass
+       
+        self.optimizer.step()
+        self.optimizer.zero_grad()
 
 
     def _flatten(self, x):
@@ -73,7 +82,12 @@ class NeuralNetworkTorch(nn.Module):
         TODO: Implement the prediction making of the network.
         The method should return the index of the most likeliest output class.
         '''
-        pass
+        with torch.no_grad():
+            x = self._flatten(x)
+            output = self._forward_pass(x)
+            predicted_class = torch.argmax(output, dim=1)
+        return predicted_class
+      
 
 
 
@@ -107,3 +121,6 @@ class NeuralNetworkTorch(nn.Module):
             correct += torch.sum(torch.eq(pred, y))
 
         return correct / len(data_loader.dataset)
+
+
+

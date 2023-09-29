@@ -5,6 +5,7 @@ import numpy as np
 import utils
 
 
+
 class NeuralNetwork():
     def __init__(self, layer_shapes, epochs=50, learning_rate=0.01, random_state=1):
         
@@ -55,7 +56,17 @@ class NeuralNetwork():
         TODO: Implement the forward propagation algorithm.
         The method should return the output of the network.
         '''
-        pass
+        # Initialize the input for the first layer
+        self.A[0] = x_train
+        
+        # Forward propagate through the layers
+        for i in range(1, len(self.layer_shapes)):
+          
+            self.Z[i - 1] = np.dot(self.weights[i- 1], self.A[i - 1])
+        
+            self.A[i] = self.activation_func(self.Z[i - 1])
+        
+        return self.A[-1]
 
 
 
@@ -65,17 +76,27 @@ class NeuralNetwork():
         The method should return a list of the weight gradients which are used to update the weights in self._update_weights().
 
         '''
-        pass 
-    
+        weight_gradients = [None]*len(self.weights)
+
+        # Calculate the initial error (delta) for the output layer
+        delta = self.cost_func_deriv(y_train,output) * self.output_func_deriv(self.Z[-1])
+        weight_gradients[-1]= np.outer(delta,self.A[-2])
+
+        # Backpropagate the error and calculate weight gradients for each layer
+        for i in range(len(self.weights)-2,-1,-1):
+            delta=np.dot(self.weights[i+1].T,delta)*self.activation_func_deriv(self.Z[i])
+            weight_gradients[i]=np.outer(delta,self.A[i])
+
+        return weight_gradients
 
 
-    def _update_weights(self,weight_gradients):
+    def _update_weights(self, weight_gradients):
         '''
         TODO: Update the network weights according to stochastic gradient descent.
-
         '''
-        pass
-
+        weight_gradients=[self.learning_rate* weight_gradient for weight_gradient in weight_gradients ]
+        self.weights=[weight - weight_gradient for weight, weight_gradient in zip(self.weights,weight_gradients) ]
+        return self.weights
 
 
     def _print_learning_progress(self, start_time, iteration, x_train, y_train, x_val, y_val):
@@ -106,7 +127,11 @@ class NeuralNetwork():
         TODO: Implement the prediction making of the network.
         The method should return the index of the most likeliest output class.
         '''
-        pass
+        # Forward pass to obtain the network's output
+        output = self._forward_pass(x)
+        
+        
+        return np.argmax(output)
 
 
 

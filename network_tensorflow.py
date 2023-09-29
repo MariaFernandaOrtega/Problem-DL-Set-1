@@ -1,56 +1,58 @@
 import tensorflow as tf
 tf.config.run_functions_eagerly(True)
 
-
-
 class NeuralNetworkTf(tf.keras.Sequential):
+    def __init__(self, sizes, input_shape=(28, 28, 1), random_state=1):
+        super().__init__()
+        self.sizes = sizes
+        self.random_state = random_state
+        tf.random.set_seed(random_state)
 
-  def __init__(self, sizes, random_state=1):
-    
-    super().__init__()
-    self.sizes = sizes
-    self.random_state = random_state
-    tf.random.set_seed(random_state)
-    
-    for i in range(0, len(sizes)):
+        # Mistake 1: We needed to reshape layer to match the input shape (28x28x1)
+        self.add(tf.keras.layers.Reshape(input_shape, input_shape=(28, 28, 1)))
 
-      if i == len(sizes) - 1:
-        self.add(tf.keras.layers.Dense(sizes[i], activation='sigmoid'))
         
-      else:
-        self.add(tf.keras.layers.Dense(sizes[i], activation='softmax'))
+        self.add(tf.keras.layers.Conv2D(32, (3, 3), activation='relu'))
+        self.add(tf.keras.layers.Conv2D(64, (3, 3), activation='relu'))
+        self.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
         
-  
-  def compile_and_fit(self, x_train, y_train, 
-                      epochs=50, learning_rate=0.01, 
-                      batch_size=1,validation_data=None):
-    
-    optimizer = tf.keras.optimizers.SGD(learning_rate=learning_rate)
-    loss_function = tf.keras.losses.BinaryCrossentropy()
-    eval_metrics = ['accuracy']
 
-    super().compile(optimizer=optimizer, loss=loss_function, 
-                    metrics=eval_metrics)
-    return super().fit(x_train, y_train, epochs=epochs, 
-                        batch_size=batch_size, 
-                        validation_data=validation_data)  
+        # Mistake 2: We needed to flatten layer to transition to fully connected layers
+        self.add(tf.keras.layers.Flatten())
+        
+        # Fully connected layers
+        for i in range(len(sizes)):
+            if i == len(sizes) - 1:
 
+                self.add(tf.keras.layers.Dense(sizes[i], activation='softmax'))
+            else:
+                self.add(tf.keras.layers.Dense(sizes[i], activation='relu'))
 
+    def compile_and_fit(self, x_train, y_train,
+                        epochs=50, learning_rate=0.01,
+                        batch_size=1, validation_data=None):
+       
+        optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
+        loss_function = tf.keras.losses.CategoricalCrossentropy()  # Mistake 3: We changed to categorical cross-entropy for multi-class
+        eval_metrics = ['accuracy']
+
+        super().compile(optimizer=optimizer, loss=loss_function, metrics=eval_metrics)
+
+        return super().fit(x_train, y_train, epochs=epochs,
+                            batch_size=batch_size,
+                            validation_data=validation_data)
 
 class TimeBasedLearningRate(tf.keras.optimizers.schedules.LearningRateSchedule):
-  '''TODO: Implement a time-based learning rate that takes as input a 
-  positive integer (initial_learning_rate) and at each step reduces the
-  learning rate by 1 until minimal learning rate of 1 is reached.
-    '''
+    def __init__(self, initial_learning_rate):
+        self.initial_learning_rate = initial_learning_rate
 
-  def __init__(self, initial_learning_rate):
+    def __call__(self, step):
+      
+        learning_rate = tf.maximum(self.initial_learning_rate - step, 1)
+        return learning_rate
 
-    pass
 
 
-  def __call__(self, step):
-
-    pass
 
 
     
