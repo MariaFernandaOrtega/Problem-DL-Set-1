@@ -20,7 +20,7 @@ class NeuralNetworkTf(tf.keras.Sequential):
         # Mistake 1: We needed to flatten layer to transition to fully connected layers
         self.add(tf.keras.layers.Flatten())
         
-        # Fully connected layers
+        
         for i in range(len(sizes)):
             if i == len(sizes) - 1:
 
