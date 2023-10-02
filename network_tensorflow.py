@@ -17,14 +17,14 @@ class NeuralNetworkTf(tf.keras.Sequential):
         self.add(tf.keras.layers.MaxPooling2D(pool_size=(2, 2)))
         
 
-        # Mistake 2: We needed to flatten layer to transition to fully connected layers
+        # Mistake 1: We needed to flatten layer to transition to fully connected layers
         self.add(tf.keras.layers.Flatten())
         
         # Fully connected layers
         for i in range(len(sizes)):
             if i == len(sizes) - 1:
 
-                self.add(tf.keras.layers.Dense(sizes[i], activation='softmax'))
+                self.add(tf.keras.layers.Dense(sizes[i], activation='softmax'))# Mistake 2: for multi-class tasks the activation function should be "softmax"
             else:
                 self.add(tf.keras.layers.Dense(sizes[i], activation='relu'))
 
@@ -33,7 +33,7 @@ class NeuralNetworkTf(tf.keras.Sequential):
                         batch_size=1, validation_data=None):
        
         optimizer = tf.keras.optimizers.Adam(learning_rate=learning_rate)
-        loss_function = tf.keras.losses.CategoricalCrossentropy()  # Mistake 3: We changed to categorical cross-entropy for multi-class
+        loss_function = tf.keras.losses.CategoricalCrossentropy()  # Mistake 3: We changed the loss function to categorical cross-entropy for multi-class
         eval_metrics = ['accuracy']
 
         super().compile(optimizer=optimizer, loss=loss_function, metrics=eval_metrics)

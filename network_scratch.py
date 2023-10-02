@@ -56,10 +56,10 @@ class NeuralNetwork():
         TODO: Implement the forward propagation algorithm.
         The method should return the output of the network.
         '''
-        # Initialize the input for the first layer
+        
         self.A[0] = x_train
         
-        # Forward propagate through the layers
+        # Forward propagating through the layers
         for i in range(1, len(self.layer_shapes)):
           
             self.Z[i - 1] = np.dot(self.weights[i- 1], self.A[i - 1])
@@ -78,11 +78,11 @@ class NeuralNetwork():
         '''
         weight_gradients = [None]*len(self.weights)
 
-        # Calculate the initial error (delta) for the output layer
+        # Initial error (delta) for the output layer
         delta = self.cost_func_deriv(y_train,output) * self.output_func_deriv(self.Z[-1])
         weight_gradients[-1]= np.outer(delta,self.A[-2])
 
-        # Backpropagate the error and calculate weight gradients for each layer
+        # Backpropagating the error and calculate weight gradients for each layer
         for i in range(len(self.weights)-2,-1,-1):
             delta=np.dot(self.weights[i+1].T,delta)*self.activation_func_deriv(self.Z[i])
             weight_gradients[i]=np.outer(delta,self.A[i])
