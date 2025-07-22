@@ -1,56 +1,32 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/XgELWE_C)
-[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-718a45dd9cf7e7f842a935f5ebbe5719a5e09af4491e668f4dbf3b35d5cca122.svg)](https://classroom.github.com/online_ide?assignment_repo_id=12082205&assignment_repo_type=AssignmentRepo)
-# Deep Learning E1394 - Problem Set 1
-
-## Downloading the assignment
-Clone the assigment repository which was created for your team. 
-```
-git clone https://github.com/hertie-data-science-lab/<repository-name>
-```
-If you feel more comfortable using git UI tools instead of the command line, feel free to use them.
-
-## Dependency management
-
-We recommend to use conda and pip for dependency management and setup an isolated conda environment for every Python assignment and project. This helps to cleanly management dependencies and makes it easier for other people to reproduce your results.
-
-A conda environment with the specified dependencies can be created with:
-```
-conda create --name <some-name> --file requirements.txt
-```
-
-## Submitting your work
-
-Once the deadline has passed, you are not able to push to your repository anymore or update it in any other way and all changes on the main branch will be considered for grading. In other words, there is no "submit" button which you need to press. You just need to ensure that all your work has been pushed / uploaded to GitHub before the deadline.
-
-Uploading a new or edited file to GitHub involves three steps:
-1. Add the file to the staging area:
-    ```
-    git add <file to be added>
-    ```
-2. Create a commit:
-    ```
-    git commit -m <commit msg - briefly describe your change>
-    ```
-3. Push the local commit to GitHub:
-    ```
-    git push
-    ```
-
-To avoid conflicts when multiple people are working on the same file, we recommend to push your changes as frequently as possible and always pull the latest changes from GitHub before you start working. Also, as a nice teammate, test your changes before you push them and use meaninful commit messages to make it easy to understand your changes.
-
-## Asking for help
-
-If you have important questions or believe to have spotted an error, please open an issue on your repository and mention the teaching assistant with @chiara-fb .
-
-## Useful Links
-* Git best practices: https://gist.github.com/luismts/495d982e8c5b1a0ced4a57cf3d93cf60
-* How to write a good git commit message: https://cbea.ms/git-commit/
-* Book "Dive into Deep Learning": https://d2l.ai/
-* Keras model training and evaluation: https://www.tensorflow.org/guide/keras/train_and_evaluate
-* Scheduled or adaptive learning rate: https://towardsdatascience.com/learning-rate-schedules-and-adaptive-learning-rate-methods-for-deep-learning-2c8f433990d1
-* Tutorial on pushing and submitting work with GitHub classroom: https://www.youtube.com/watch?v=jXpT8eOzzCM
-* Neural network from scratch:
-    * https://towardsdatascience.com/math-neural-network-from-scratch-in-python-d6da9f29ce65
-    * https://pythonalgos.com/create-a-neural-network-from-scratch-in-python-3/
-    * https://github.com/casperbh96/Neural-Network-From-Scratch/blob/master/NN_From_Scratch.ipynb
-    * https://www.codingame.com/playgrounds/59631/neural-network-xor-example-from-scratch-no-libs
+Neural network implementation
+You will implement different classes representing a fully connected neural net-
+work for image classification problems. There are two classes of neural networks:
+one using only basic packages and one using PyTorch. In addition to that, a
+third class of neural network has been implemented using Tensorflow and re-
+quires some fixing in order to function correctly.
+As you work through this problem, you will see how those machine learning
+libraries abstract away implementation details allowing for fast and simple con-
+struction of deep neural networks.
+For each approach, a Python template is supplied that you will need to
+complete with the missing methods. Feel free to play around with the rest,
+but please do not change anything else for the submission. All approaches will
+solve the same classification task, which will help you validate that your code
+is working and that the network is training properly.
+For this problem, you will work with the MNIST dataset of handwritten
+digits, which has been widely used for training image classification models. You
+will build models for a multiclass classification task, where the goal is to predict
+what digit is written in an image (to be precise, this is a k-class classification
+task where in this case k = 10). The MNIST dataset consists of black and white images of digits 
+from 0 to 9 with a pixel resolution of 28x28. Therefore,
+in a tensor representation the images have the shape 28x28x1. The goal is
+to classify what digit is drawn on a picture using a neural network with the
+following characteristics:
+• an arbitrary amount of hidden layers, each with arbitrary amount of neu-
+rons
+• sigmoid activation function for all hidden layers
+• softmax activation function for the output layer
+• cross entropy loss function. *
+* For the implementation from scratch (Part (a)) we use a mean squared
+error (MSE) loss function. This is not recommended for a classification task,
+but we use it to simplify the implementation. In the future please consider using
+cross entropy / log loss instead.
