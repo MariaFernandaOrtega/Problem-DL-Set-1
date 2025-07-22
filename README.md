@@ -1,4 +1,5 @@
-Neural network implementation
+** Neural network implementation **
+
 You will implement different classes representing a fully connected neural net-
 work for image classification problems. There are two classes of neural networks:
 one using only basic packages and one using PyTorch. In addition to that, a
