@@ -104,24 +104,25 @@ In the provided Jupyter notebook `MNIST_classification.ipynb`:
 📂 Repository Contents
 
 
-* data/MNIST/raw/
+* data/MNIST/raw/:
 Contains the raw MNIST dataset files (handwritten digits images). Used as training and test data.
 
-* A1_GroupB (theory).pdf
+* A1_GroupB (theory).pdf: 
 A written theory assignment
 
-* MNIST_classification.ipynb
+* MNIST_classification.ipynb: 
 The main Jupyter notebook where you train and evaluate the neural networks.
 
-* network_scratch.py
+* network_scratch.py: 
 A from-scratch implementation of a feedforward neural network using only Python + NumPy.
 
-* network_pytorch.py
+* network_pytorch.py: 
 Same neural network but implemented using PyTorch.
 
-* network_tensorflow.py
+* network_tensorflow.py: 
 A partially completed Keras/TensorFlow model. Has 3 bugs that need to be fixed before it runs.
 
-* utils.py
+* utils.py: 
 Helper functions (e.g., data loading, preprocessing, metrics).
+
 
